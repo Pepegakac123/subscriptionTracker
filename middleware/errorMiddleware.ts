@@ -5,7 +5,7 @@ import type {
 	Response,
 } from "express";
 import { StatusCodes } from "http-status-codes";
-import CustomAPIError from "../errors/custom-api";
+import CustomAPIError from "../errors/custom-api.ts";
 
 export const errorHandlerMiddleware: ErrorRequestHandler = (
 	err: Error,
