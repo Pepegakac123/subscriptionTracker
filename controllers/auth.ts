@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
-import User from "../db/models/user.model";
-import { BadRequestError } from "../errors/";
+import User from "../db/models/user.model.ts";
+import { BadRequestError } from "../errors/index.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
@@ -34,7 +34,7 @@ export const signUp = async (
 		const JWT_SECRET = process.env.JWT_SECRET as string; // Upewniamy się, że to string
 		const JWT_EXPIRES = process.env.JWT_EXPIRES_IN
 			? Number(process.env.JWT_EXPIRES_IN)
-			: "1d";
+			: "3600";
 
 		if (!JWT_SECRET) {
 			throw new Error("JWT_SECRET is not defined in environment variables");
