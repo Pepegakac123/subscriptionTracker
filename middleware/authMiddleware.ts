@@ -1,38 +1,33 @@
-import type { NextFunction, Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
+import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
-import User from "../db/models/user.model";
-import type { JwtPayload } from "../types/index.ts";
+import User from "../db/models/user.model.ts";
 
-const jwtSecret = process.env.JWT_SECRET;
-const authorize = async (req: Request, res: Response, next: NextFunction) => {
+const authorize: RequestHandler = async (req, res, next) => {
 	try {
-		let token: string | undefined;
+		// Logika autoryzacji
+		const token = req.headers.authorization?.split(" ")[1];
 
-		if (req.headers.authorization?.startsWith("Bearer")) {
-			token = req.headers.authorization.split(" ")[1];
+		if (!token) {
+			res.status(401).json({ message: "No token, authorization denied" });
+			return;
 		}
-		if (!token)
-			return res
-				.status(StatusCodes.UNAUTHORIZED)
-				.json({ message: "Unauthorized" });
 
-		if (!jwtSecret)
-			throw new Error("You should have JWT_SECRET field in your .env ");
-		const decoded: JwtPayload = jwt.verify(token, jwtSecret) as JwtPayload;
-
+		const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+			userId: string;
+		};
 		const user = await User.findById(decoded.userId);
 
-		if (!user)
-			return res
-				.status(StatusCodes.UNAUTHORIZED)
-				.json({ message: "Unauthorized" });
+		if (!user) {
+			res.status(401).json({ message: "User not found" });
+			return;
+		}
 
+		// Przypisanie usera do obiektu request
 		req.user = user;
 		next();
 	} catch (error) {
-		res
-			.status(StatusCodes.UNAUTHORIZED)
-			.json({ message: "Unauthorized", error: error.message });
+		res.status(401).json({ message: "Token is not valid" });
 	}
 };
+
+export default authorize;
