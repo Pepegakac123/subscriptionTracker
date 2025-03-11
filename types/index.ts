@@ -6,3 +6,7 @@ export interface errorMiddleware {
 	res: Response;
 	next: NextFunction;
 }
+
+export type JwtPayload = {
+	userId: string;
+};
