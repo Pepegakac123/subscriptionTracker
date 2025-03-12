@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import Subscription from "../db/models/subscription.model.ts";
 import type { NextFunction, Request, Response } from "express";
 import { Unauthorized } from "../errors/index.ts";
+import { workflowClient } from "../config/upstash.ts";
 
 export const createSubscription = async (
 	req: Request,
@@ -14,7 +15,23 @@ export const createSubscription = async (
 			user: req.user?.id,
 		});
 
-		res.status(StatusCodes.CREATED).json({ success: true, data: subscription });
+		if (!process.env.SERVER_URL)
+			throw new Error("You do not have SERVER_URL defined in your env file");
+
+		const { workflowRunId } = await workflowClient.trigger({
+			url: `${process.env.SERVER_URL}/api/v1/workflows/subscription/reminder`,
+			body: {
+				subscriptionId: subscription.id,
+			},
+			headers: {
+				"content-type": "application/json",
+			},
+			retries: 0,
+		});
+
+		res
+			.status(201)
+			.json({ success: true, data: { subscription, workflowRunId } });
 	} catch (error) {
 		next(error);
 	}
