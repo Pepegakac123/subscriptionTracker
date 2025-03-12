@@ -5,8 +5,13 @@ import userRouter from "./routes/user.ts";
 import subscriptionRouter from "./routes/subscription.ts";
 import { errorHandlerMiddleware } from "./middleware/errorMiddleware.ts";
 import connectToDb from "./db/db.ts";
+import { arcjetMiddleware } from "./middleware/arcjetMiddleware.ts";
+
 const app = express();
+app.use(arcjetMiddleware);
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+// app.use(cookieParser());
 
 app.get("/", (req, res) => {
 	res.send("Welcome to the subscription tracker");
