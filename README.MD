@@ -13,7 +13,7 @@ SubDub is a subscription management system that helps users keep track of their 
 
 **Key Problem Solved:** Preventing unexpected subscription renewals and helping users maintain control over their recurring expenses.
 
-![SubDub Email Notification](https://github.com/Pepegakac123/subscriptionTracker/assets/emailNotification.png)
+![SubDub Email Notification](https://github.com/Pepegakac123/subscriptionTracker/blob/main/assets/emailNotification.png)
 
 ## 🚀 Key Features
 
