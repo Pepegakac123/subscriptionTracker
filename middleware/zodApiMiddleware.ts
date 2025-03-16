@@ -1,13 +1,13 @@
 import { apiReference } from "@scalar/express-api-reference";
-import { openapiSpecification } from "../config/swagger.ts";
 import type { Express } from "express";
+import { openApiDocument } from "../config/zodOpenApi.ts";
 
-export default async function setupSwaggerAndScalar(
+export default async function setupZodApiAndScalar(
 	app: Express,
 ): Promise<Express> {
 	app.get("/openapi.json", (req, res) => {
 		res.setHeader("Content-Type", "application/json");
-		res.send(openapiSpecification);
+		res.send(openApiDocument);
 	});
 
 	app.use(

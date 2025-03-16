@@ -7,9 +7,7 @@ import { errorHandlerMiddleware } from "./middleware/errorMiddleware.ts";
 import connectToDb from "./db/db.ts";
 import { arcjetMiddleware } from "./middleware/arcjetMiddleware.ts";
 import workflowRouter from "./routes/workflow.ts";
-import { openapiSpecification } from "./config/swagger.ts";
-import { apiReference } from "@scalar/express-api-reference";
-import setupSwaggerAndScalar from "./middleware/swaggerMiddleware.ts";
+import setupZodApiAndScalar from "./middleware/zodApiMiddleware.ts";
 
 const app = express();
 app.use(arcjetMiddleware);
@@ -25,7 +23,7 @@ app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/workflows", workflowRouter);
-await setupSwaggerAndScalar(app);
+await setupZodApiAndScalar(app);
 
 app.use(errorHandlerMiddleware);
 
