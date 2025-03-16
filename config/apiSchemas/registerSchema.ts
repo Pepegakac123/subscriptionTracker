@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { RouteConfig } from "@asteasolutions/zod-to-openapi";
-import { UserSchema } from "../../schema/AuthSchemas.ts";
+import { SignUpUserSchema } from "../zodOpenApi.ts";
+// import { UserSchema } from "../../schema/AuthSchemas.ts";
 
 export const registerApiSchema = {
 	method: "post",
@@ -10,7 +11,7 @@ export const registerApiSchema = {
 		body: {
 			content: {
 				"application/json": {
-					schema: UserSchema,
+					schema: SignUpUserSchema,
 				},
 			},
 		},
@@ -25,7 +26,7 @@ export const registerApiSchema = {
 						message: z.string(),
 						data: z.object({
 							token: z.string(),
-							user: UserSchema.omit({ password: true }),
+							user: SignUpUserSchema.omit({ password: true }),
 						}),
 					}),
 				},

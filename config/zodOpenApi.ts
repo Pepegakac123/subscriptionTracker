@@ -4,18 +4,19 @@ import {
 	extendZodWithOpenApi,
 } from "@asteasolutions/zod-to-openapi";
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
-import { UserSchema } from "../schema/AuthSchemas.ts";
+import { SignUpUserSchema } from "../schema/AuthSchemas.ts";
 import { registerApiSchema } from "./apiSchemas/registerSchema.ts";
+import { loginApiSchema } from "./apiSchemas/loginSchema.ts";
+import { logoutApiSchema } from "./apiSchemas/logoutSchema.ts";
 
 extendZodWithOpenApi(z);
 
-const registry = new OpenAPIRegistry();
-
-// Rejestracja schematu
-registry.register("User", UserSchema);
+export const registry = new OpenAPIRegistry();
 
 // Rejestracja endpointu
 registry.registerPath(registerApiSchema);
+registry.registerPath(loginApiSchema);
+registry.registerPath(logoutApiSchema);
 
 // Generowanie dokumentu OpenAPI
 const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -33,4 +34,4 @@ const openApiDocument = generator.generateDocument({
 	],
 });
 
-export { openApiDocument, UserSchema };
+export { openApiDocument, SignUpUserSchema };
